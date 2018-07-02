@@ -15,27 +15,28 @@ import com.facebook.stetho.Stetho;
  *     // use client to send requests to API
  *
  */
-public class RestApplication extends Application {
+public class TwitterApp extends Application {
 
-    MyDatabase myDatabase;
+    com.codepath.apps.restclienttemplate.MyDatabase myDatabase;
 
     @Override
     public void onCreate() {
         super.onCreate();
         // when upgrading versions, kill the original tables by using
 		// fallbackToDestructiveMigration()
-        myDatabase = Room.databaseBuilder(this, MyDatabase.class,
-                MyDatabase.NAME).fallbackToDestructiveMigration().build();
+        myDatabase = Room.databaseBuilder(this, com.codepath.apps.restclienttemplate.MyDatabase.class,
+                com.codepath.apps.restclienttemplate.MyDatabase.NAME).fallbackToDestructiveMigration().build();
 
         // use chrome://inspect to inspect your SQL database
         Stetho.initializeWithDefaults(this);
     }
 
-    public static RestClient getRestClient(Context context) {
-        return (RestClient) RestClient.getInstance(RestClient.class, context);
+    public static com.codepath.apps.restclienttemplate.TwitterClient getRestClient(Context context) {
+        //used by all of the activities to get access to an instance of the RestClient
+        return (com.codepath.apps.restclienttemplate.TwitterClient) com.codepath.apps.restclienttemplate.TwitterClient.getInstance(com.codepath.apps.restclienttemplate.TwitterClient.class, context);
     }
 
-    public MyDatabase getMyDatabase() {
+    public com.codepath.apps.restclienttemplate.MyDatabase getMyDatabase() {
         return myDatabase;
     }
 }
