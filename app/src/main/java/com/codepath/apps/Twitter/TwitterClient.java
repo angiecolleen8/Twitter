@@ -8,6 +8,9 @@ import com.github.scribejava.core.builder.api.BaseApi;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.util.function.Consumer;
+
+
 /*
  *
  * This is the object responsible for communicating with a REST API.
@@ -25,8 +28,12 @@ public class TwitterClient extends OAuthBaseClient {
     //https://api.twitter.com/1.1/statuses/home_timeline.json resource URL
     public static final BaseApi REST_API_INSTANCE = TwitterApi.instance();
     public static final String REST_URL = "https://api.twitter.com/1.1";
+
+    ////////TODO - DO I WANT TO PUT THE API KEY IN A SECRETS FILE AGAIN?
+
+
     public static final String REST_CONSUMER_KEY = "bWeGMCbX4yfUfNHNffsxANjWQ";
-    public static final String REST_CONSUMER_SECRET = "8ssW1YrNwnSxluXnTZ8f7WOkKsceLsaTPHsEAFxoHw0IS4l9vI"; //had /t and /n at beginning and end of Consumer secret. Do I need that on there?
+    public static final String REST_CONSUMER_SECRET = "8ssW1YrNwnSxluXnTZ8f7WOkKsceLsaTPHsEAFxoHw0IS4l9vI"; //I had /t and /n at beginning and end of Consumer secret. Do I need that on there?
 
     // Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
     public static final String FALLBACK_URL = "https://codepath.github.io/android-rest-client-template/success.html";
