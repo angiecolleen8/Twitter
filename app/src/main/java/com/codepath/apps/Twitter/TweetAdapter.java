@@ -50,11 +50,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         //populate the views according to this data
         holder.tvUserName.setText(tweet.user.name);
         holder.tvBody.setText(tweet.body);
+        holder.tvTimeStamp.setText(tweet.getRelativeTimeAgo(tweet.createdAt));//needs another param?
 
         //load images using Glide
         GlideApp.with(context)
                 .load(tweet.user.profileImageURL) //imageURL is profileImageURL
                 .into(holder.ivProfileImage); //TODO - fix glide!
+
     }
 
     public int getItemCount() {
@@ -69,6 +71,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ImageView ivProfileImage;
         public TextView tvUserName;
         public TextView tvBody;
+        public TextView tvTimeStamp;
 
         public ViewHolder(View itemView) {
             super(itemView); //Why do we need to call the super-constructor?
@@ -77,7 +80,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
-
+            tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
             //itemView.setOnClickListener(this); //added this
         }
     }

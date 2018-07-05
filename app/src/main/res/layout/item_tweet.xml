@@ -31,4 +31,12 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         android:text="TweetBody" />
 
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="TimeStamp" />
+
 </RelativeLayout>
