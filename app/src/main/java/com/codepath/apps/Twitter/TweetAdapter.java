@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.Twitter.models.GlideApp;
 import com.codepath.apps.Twitter.models.Tweet;
 import com.codepath.apps.restclienttemplate.R;
 
@@ -49,6 +50,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         //populate the views according to this data
         holder.tvUserName.setText(tweet.user.name);
         holder.tvBody.setText(tweet.body);
+
+        //load images using Glide
+        GlideApp.with(context)
+                .load(tweet.user.profileImageURL) //imageURL is profileImageURL
+                .into(holder.ivProfileImage); //TODO - fix glide!
     }
 
     public int getItemCount() {
