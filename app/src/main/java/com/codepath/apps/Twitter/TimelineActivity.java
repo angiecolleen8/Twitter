@@ -1,12 +1,16 @@
 package com.codepath.apps.Twitter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.Twitter.models.Tweet;
+import com.codepath.apps.restclienttemplate.ComposeActivity;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
@@ -27,6 +31,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,24 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
 
         populateTimeline();
+    }
+    @Override //TODO -Commented out @Override notation in several places...is that ok? Also commented it out in TweetAdapter, onClick
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public void onComposeAction(MenuItem menuItem) {
+        //need an onClickListener, so that when "compose" button is clicked, takes user to ComposeActivity
+        //menuItem.setOnMenuItemClickListener();
+        launchComposeView();
+    }
+
+    public void launchComposeView() {
+        // first parameter is the context, second is the class of the activity to launch
+        Intent i = new Intent(this, ComposeActivity.class); //change activity names
+        startActivity(i); // brings up the second activity
     }
 
     private void populateTimeline() {
@@ -76,6 +99,8 @@ public class TimelineActivity extends AppCompatActivity {
                      //i.e., with a ListView, I think you would use notifyDataSetChanged
                 }
             }
+
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

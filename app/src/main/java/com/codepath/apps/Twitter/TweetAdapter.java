@@ -1,6 +1,7 @@
 package com.codepath.apps.Twitter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +12,10 @@ import android.widget.TextView;
 
 import com.codepath.apps.Twitter.models.GlideApp;
 import com.codepath.apps.Twitter.models.Tweet;
+import com.codepath.apps.restclienttemplate.ComposeActivity;
 import com.codepath.apps.restclienttemplate.R;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -55,7 +59,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         //load images using Glide
         GlideApp.with(context)
                 .load(tweet.user.profileImageURL) //imageURL is profileImageURL
-                .into(holder.ivProfileImage); //TODO - fix glide!
+                .into(holder.ivProfileImage);
 
     }
 
@@ -65,7 +69,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     //create ViewHolder class
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {     //Should I add "implements View.OnClickListener"? //No static?
+    public class ViewHolder extends RecyclerView.ViewHolder {     //Should I add "implements View.OnClickListener"? //No static?
 
         //declare the views that are inside our item_tweet
         public ImageView ivProfileImage;
@@ -82,6 +86,23 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
             //itemView.setOnClickListener(this); //added this
+        }
+
+        //@Override
+        public void onClick(View view) {
+            //gets item position
+            int position = getAdapterPosition();
+            // make sure the position is valid, i.e. actually exists in the view
+            if (position != RecyclerView.NO_POSITION) {
+                // get the tweet at the position, this is why class can't be static
+                Tweet tweet = mTweets.get(position); //Why is it that when I take away "static" on the ViewHolder Class that mTweets is suddenly recognized?
+                // create intent for new activity
+                Intent intent = new Intent(context, ComposeActivity.class);
+                // serialize movie using parceller, short name is key
+                intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
+                // show the activity
+                context.startActivity(intent);
+            }
         }
     }
 }
