@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.codepath.apps.Constants;
 import com.codepath.apps.Twitter.models.Tweet;
 import com.codepath.apps.restclienttemplate.ComposeActivity;
 import com.codepath.apps.restclienttemplate.R;
@@ -68,16 +70,32 @@ public class TimelineActivity extends AppCompatActivity {
 
         };*/
         //new intent to go ComposeActivity, which is in launchComposeView
-        //launchComposeView();
+        launchComposeView();
         //call onActivityResult - need "code" to take you to
+        //onActivityResult();
     }
 
-    //onActivityResult - method that takes you back to timeline, scrolls to top, fills top position with your new tweet
 
     public void launchComposeView() {
         // first parameter is the context, second is the class of the activity to launch
-        Intent i = new Intent(this, ComposeActivity.class); //change activity names
+        Intent i = new Intent(this, ComposeActivity.class); //"I intend to go from this activity to ComposeActivity
         startActivity(i); // brings up the second activity
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // REQUEST_CODE is defined above
+        //onActivityResult - method that takes you back to timeline, scrolls to top, fills top position with your new tweet
+        if (resultCode == Constants.RESULT_OK && requestCode == Constants.REQUEST_CODE_COMPOSE) {
+            // Extract name value from result extras
+            String name = data.getExtras().getString("name");
+            int code = data.getExtras().getInt("code", 0);
+            // Toast the name to display temporarily on screen
+            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+            populateTimeline(); //refresh timeline so that we see new tweet at top
+        } else {
+            Toast.makeText(this, "Compose failed", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void populateTimeline() {
