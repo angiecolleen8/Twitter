@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codepath.apps.Twitter.models.GlideApp;
+import com.bumptech.glide.Glide;
 import com.codepath.apps.Twitter.models.Tweet;
 import com.codepath.apps.restclienttemplate.ComposeActivity;
 import com.codepath.apps.restclienttemplate.R;
@@ -57,7 +57,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvTimeStamp.setText(tweet.getRelativeTimeAgo(tweet.createdAt));//needs another param?
 
         //load images using Glide
-        GlideApp.with(context)
+        Glide.with(context) //changed from GlideApp to Glide
                 .load(tweet.user.profileImageURL) //imageURL is profileImageURL
                 .into(holder.ivProfileImage);
 
@@ -98,7 +98,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 Tweet tweet = mTweets.get(position); //Why is it that when I take away "static" on the ViewHolder Class that mTweets is suddenly recognized?
                 // create intent for new activity
                 Intent intent = new Intent(context, ComposeActivity.class);
-                // serialize movie using parceller, short name is key
+                // serialize tweet using parceller, short name is key
                 intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
                 // show the activity
                 context.startActivity(intent);

@@ -21,6 +21,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline); //sets the main layout as the timeline activity?
+        setContentView(R.layout.activity_timeline); //sets the main layout as the timeline activity
 
         client = TwitterApp.getRestClient(this); //says params aren't right, needs Context?
 
@@ -52,34 +53,24 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setAdapter(tweetAdapter);
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         //set onClickListener for Menu Item
-
         populateTimeline();
     }
-    @Override //TODO -Commented out @Override notation in several places...is that ok? Also commented it out in TweetAdapter, onClick
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        //TODO - actually, I think the onClickListener goes in the main OnCreate
         return true;
     }
 
     public void onComposeAction(MenuItem menuItem) {
-        //need an onClickListener, so that when "compose" button is clicked, takes user to ComposeActivity
-        /*menuItem.setOnMenuItemClickListener(new View.OnClickListener) {
-
-        };*/
-        //new intent to go ComposeActivity, which is in launchComposeView
         launchComposeView();
-        //call onActivityResult - need "code" to take you to
-        //onActivityResult();
     }
-
 
     public void launchComposeView() {
         // first parameter is the context, second is the class of the activity to launch
         Intent i = new Intent(this, ComposeActivity.class); //"I intend to go from this activity to ComposeActivity
-        startActivity(i); // brings up the second activity
+        startActivityForResult(i, Constants.REQUEST_CODE_COMPOSE); // brings up the second activity
     }
 
     @Override
@@ -87,12 +78,16 @@ public class TimelineActivity extends AppCompatActivity {
         // REQUEST_CODE is defined above
         //onActivityResult - method that takes you back to timeline, scrolls to top, fills top position with your new tweet
         if (resultCode == Constants.RESULT_OK && requestCode == Constants.REQUEST_CODE_COMPOSE) {
-            // Extract name value from result extras
-            String name = data.getExtras().getString("name");
-            int code = data.getExtras().getInt("code", 0);
+            //unwrap tweet from parsels - use same name as when you parcelled it
+            Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("composedTweet"));
+            //add new tweet to arrayList
+            tweets.add(0, newTweet);
+            //notify adapter that you inserted a new tweet item at top of list
+            tweetAdapter.notifyItemInserted(0);
+            //scroll to top of recycler view
+            rvTweets.scrollToPosition(0);
             // Toast the name to display temporarily on screen
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-            populateTimeline(); //refresh timeline so that we see new tweet at top
+            Toast.makeText(this, "Successfully composed tweet", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Compose failed", Toast.LENGTH_LONG).show();
         }
@@ -122,11 +117,10 @@ public class TimelineActivity extends AppCompatActivity {
                     tweets.add(tweet);
                     //notify adapter that we have added an item
                     tweetAdapter.notifyItemInserted(tweets.size() - 1); //the last item added will be at the last index of the arrayList
-                        //-- With a recyclerView, we just notify the adapter of the things that have changed. With ListView, we have to notify the adapter that the entire data set has changed.
-                     //i.e., with a ListView, I think you would use notifyDataSetChanged
+                    //-- With a recyclerView, we just notify the adapter of the things that have changed. With ListView, we have to notify the adapter that the entire data set has changed.
+                    //i.e., with a ListView, I think you would use notifyDataSetChanged
                 }
             }
-
 
 
             @Override
@@ -150,8 +144,6 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("Twitter client", errorResponse.toString());
                 throwable.printStackTrace();
             }
-
-
         });
     }
 }
