@@ -3,8 +3,11 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.Constants;
@@ -22,6 +25,7 @@ public class ComposeActivity extends AppCompatActivity {
     //variables
     com.codepath.apps.restclienttemplate.TwitterClient client;
     EditText etComposeTweet;
+    TextView tvComposeTweet;
 
 
     @Override
@@ -30,6 +34,23 @@ public class ComposeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_compose);
         client = com.codepath.apps.restclienttemplate.TwitterApp.getRestClient(this);
         etComposeTweet = (EditText) findViewById(R.id.etComposeTweet);
+        tvComposeTweet = (TextView) findViewById(R.id.tvComposeTweet);
+        //TextWatcher for running remaining char count in
+        final TextWatcher mTextEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                tvComposeTweet.setText(String.valueOf(140 - s.length()));
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        etComposeTweet.addTextChangedListener(mTextEditorWatcher); //set TextWatcher (for running char count) here
+
     }
 
     public void onSubmit(View v) {
@@ -51,7 +72,6 @@ public class ComposeActivity extends AppCompatActivity {
                 } catch (JSONException e) { //failed to read JSONOBject, though object was received
                     e.printStackTrace();
                 }
-
             }
 
 

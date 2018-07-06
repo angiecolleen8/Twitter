@@ -23,8 +23,17 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/sendButton"
         android:ems="10"
+        android:maxLength="140"
         android:inputType="textMultiLine"
         tools:layout_editor_absoluteX="3dp"
         tools:layout_editor_absoluteY="65dp" />
+
+    <TextView
+        android:id="@+id/tvComposeTweet"
+        android:layout_width="match_parent"
+        android:layout_height="248dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/sendButton"
+        android:text="TextView" />
     <!-- Do I need to add  android:inputType="textCapSentences|textMultiline" to get iut to allow multiple lines?-->
 </RelativeLayout>
