@@ -49,6 +49,7 @@ public class TimelineActivity extends AppCompatActivity {
         //setup the Recycler view - this includes setting up the Layout manager and using the adapter
         rvTweets.setAdapter(tweetAdapter);
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        //set onClickListener for Menu Item
 
         populateTimeline();
     }
@@ -56,14 +57,22 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        //TODO - actually, I think the onClickListener goes in the main OnCreate
         return true;
     }
 
     public void onComposeAction(MenuItem menuItem) {
         //need an onClickListener, so that when "compose" button is clicked, takes user to ComposeActivity
-        //menuItem.setOnMenuItemClickListener();
-        launchComposeView();
+        /*menuItem.setOnMenuItemClickListener(new View.OnClickListener) {
+
+        };*/
+        //new intent to go ComposeActivity, which is in launchComposeView
+        //launchComposeView();
+        //call onActivityResult - need "code" to take you to
     }
+
+    //onActivityResult - method that takes you back to timeline, scrolls to top, fills top position with your new tweet
 
     public void launchComposeView() {
         // first parameter is the context, second is the class of the activity to launch
