@@ -85,7 +85,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
-            //itemView.setOnClickListener(this); //added this
         }
 
         //@Override
@@ -104,5 +103,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 context.startActivity(intent);
             }
         }
+    }
+
+    /* helper methods for pull down to refresh */
+    // Clean all elements of the recycler
+    public void clear() {
+        mTweets.clear(); //mTweets = items?. Or, item_tweet.xml?
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Tweet> tweets) {
+        mTweets.addAll(tweets);
+        notifyDataSetChanged();
     }
 }

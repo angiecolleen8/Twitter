@@ -2,6 +2,7 @@ package com.codepath.apps.Twitter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,8 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
     Menu menu;
+    SwipeRefreshLayout swipeContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline); //sets the main layout as the timeline activity
 
         client = TwitterApp.getRestClient(this); //says params aren't right, needs Context?
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
         //find RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
@@ -52,9 +57,54 @@ public class TimelineActivity extends AppCompatActivity {
         //setup the Recycler view - this includes setting up the Layout manager and using the adapter
         rvTweets.setAdapter(tweetAdapter);
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
+
         //set onClickListener for Menu Item
-        populateTimeline();
+        populateTimeline(); //Where does this fit in with SwipeRefreshLayout?
+
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                fetchTimelineAsync(0);
+                //something to grab new tweets
+                swipeContainer.setRefreshing(false);
+                //TODO - add something to stop refresh circle from spinning
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
+//} //COMMENTED OUT BRACKET
+
+
+    public void fetchTimelineAsync(int page) {
+        // Send the network request to fetch the updated data
+        // `client` here is an instance of Android Async HTTP
+        // getHomeTimeline is an example endpoint.
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
+                //CLEAR OUT old items before appending in the new ones
+                tweetAdapter.clear();
+                tweetAdapter.addAll(tweets);
+                populateTimeline();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -121,7 +171,6 @@ public class TimelineActivity extends AppCompatActivity {
                     //i.e., with a ListView, I think you would use notifyDataSetChanged
                 }
             }
-
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
