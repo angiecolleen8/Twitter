@@ -108,7 +108,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     /* helper methods for pull down to refresh */
     // Clean all elements of the recycler
     public void clear() {
-        mTweets.clear(); //mTweets = items?. Or, item_tweet.xml?
+        mTweets.clear();
         notifyDataSetChanged();
     }
 
