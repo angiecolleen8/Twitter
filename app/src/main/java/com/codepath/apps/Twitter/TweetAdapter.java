@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.codepath.apps.Twitter.models.GlideApp;
 import com.codepath.apps.Twitter.models.Tweet;
 import com.codepath.apps.restclienttemplate.ComposeActivity;
 import com.codepath.apps.restclienttemplate.R;
@@ -18,6 +18,8 @@ import com.codepath.apps.restclienttemplate.R;
 import org.parceler.Parcels;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
@@ -57,10 +59,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvTimeStamp.setText(tweet.getRelativeTimeAgo(tweet.createdAt));//needs another param?
 
         //load images using Glide
-        Glide.with(context) //changed from GlideApp to Glide
-                .load(tweet.user.profileImageURL) //imageURL is profileImageURL
-                .into(holder.ivProfileImage);
 
+        int radius = 30; // corner radius, higher value = more rounded
+        int margin = 10; // crop margin, set to 0 for corners with no crop
+        //round corners on profile images
+        GlideApp.with(context) //changed from GlideApp to Glide
+                .load(tweet.user.profileImageURL)
+                .transform(new RoundedCornersTransformation(radius, margin))//imageURL is profileImageURL
+                .into(holder.ivProfileImage);
+        //round corners on item_tweet
+        /*GlideApp.with(context)
+                .load(tweet.user)
+                .*/
     }
 
     public int getItemCount() {

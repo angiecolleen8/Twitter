@@ -35,5 +35,4 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/sendButton"
         android:text="TextView" />
-    <!-- Do I need to add  android:inputType="textCapSentences|textMultiline" to get iut to allow multiple lines?-->
 </RelativeLayout>
